@@ -1,0 +1,12 @@
+---
+# vars file for apache
+package_name: nginx
+hostname:  repo.example.com
+path:  /var/www/projects/yumzy/
+url1: http://nginx.org/packages/centos/$releasever/$basearch/
+gpg_url: https://nginx.org/keys/nginx_signing.key
+url2: deb http://nginx.org/packages/ubuntu bionic main
+set: yes
+avail: present
+
+

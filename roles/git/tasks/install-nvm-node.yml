@@ -1,0 +1,44 @@
+---
+- name: "Install  node_manager "
+  get_url:
+    url: "{{ nvm_url }}"
+    dest: "{{ path2 }}"
+    owner:  "{{ user }}"
+    group:  "{{ user }}"
+    mode: 0777
+
+- name: "execute nvm"
+  become: true
+  become_user: "{{ user }}"
+  shell: . "{{ path2 }}"install.sh
+  register: output
+
+- name: "execute profile"
+  become: true
+  become_user: "{{ user }}"
+  shell:  .  "{{ path2 }}.bashrc"
+  args:
+    executable: /bin/bash 
+  register: output2
+  
+- name: "installation node"
+  command: sudo -iu {{ user }} nvm install v12.16.3
+  
+  
+- name: Create a symbolic link node
+  file:
+    src: "/home/{{ user }}/.nvm/versions/node/{{ version }}/bin/node"
+    dest: /usr/local/bin/node
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    state: link
+
+- name: Create a symbolic link npm
+  file:
+    src: "/home/{{ user}}/.nvm/versions/node/{{ version }}/bin/npm"
+    dest: /usr/local/bin/npm
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    state: link
+
+

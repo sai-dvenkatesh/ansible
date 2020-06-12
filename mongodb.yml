@@ -1,0 +1,70 @@
+#Install mongodb
+---
+- hosts: servers
+  user: admin
+  become: yes
+  become_method: sudo
+  tasks:
+  - name: "Configure Mongodb Centos repository"
+    file:
+        path: /etc/yum.repos.d/mongo-4.0.repo
+        state: touch
+        mode: 0644
+        owner: root
+    when: ansible_os_family == "RedHat"
+
+  - name: "Append Configuration Settings"
+    blockinfile:
+        path: /etc/yum.repos.d/mongo-4.0.repo
+        block: |
+          [mongodb-org-4.0]
+          name=MongoDB Repository
+          baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/4.0/x86_64/
+          gpgcheck=0
+          enabled=1
+          gpgkey=https://www.mongodb.org/static/pgp/server-4.0.asc
+    when: ansible_os_family == "RedHat"
+  
+  - name: "Install MongodB packages"
+    yum: 
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - mongodb-org-4.0.10-1.el7.x86_64 
+      - mongodb-org-mongos-4.0.10-1.el7.x86_64 
+      - mongodb-org-server-4.0.10-1.el7.x86_64 
+      - mongodb-org-shell-4.0.10-1.el7.x86_64 
+      - mongodb-org-tools-4.0.10-1.el7.x86_64 
+
+  - name: "start mongod service"
+    tags: start-service
+    service:
+      name: mongod
+      state: started
+      enabled: yes
+    when: ansible_os_family == "RedHat"
+ 
+  - name: change the config file
+    tags: change-config
+    replace:
+      path: /etc/mongod.conf
+      regexp: 'bindIp: 127.0.0.1'
+      replace: 'bindIp: 0.0.0.0'
+    when: ansible_os_family == "RedHat"
+    notify: restart mongod
+    
+  - name: create mongodb users
+    mongodb_user:
+      database: admin
+      name: "mongoadadmin"
+      password: "L6ebvCyjM4S6Jndm"
+      roles: userAdminAnyDatabase,readWriteAnyDatabase
+      state: present
+    when: ansible_os_family == "RedHat"
+ 
+  handlers:
+    - name: restart mongod
+      service:
+        name: mongod
+        state: restarted 
+ 

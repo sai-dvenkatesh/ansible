@@ -1,0 +1,41 @@
+---
+- name: configure virtualhosting
+  hosts: all
+  remote_user: admin
+  become: true
+  become_method: sudo
+  
+  tasks:
+    - name: "update config file"
+      blockinfile: 
+        path: /etc/httpd/conf/httpd.conf
+        block: |
+          <virtualhost: {{ ansible_hostname }}.example.com:80>
+           servername {{ ansible_hostname }}
+           documentroot /var/www/html/
+           </virtualhost>
+      notify: restarted the httpd
+      when: ansible_os_family == "RedHat"
+
+    - name: "update config file"
+      blockinfile: 
+        path: /etc/apache2/apache2.conf
+        block: |
+          <virtualhost: {{ ansible_hostname }}.example.com:80>
+           servername {{ ansible_hostname }}
+           documentroot /var/www/html/
+           </virtualhost>
+      notify: restarted the apache2
+      when: ansible_os_family == "Debian"
+  
+  handlers:
+    - name: restarted the httpd
+      service:
+        name: httpd
+        state: restarted
+    - name: restarted the apache2
+      service: 
+        name: apache2
+        state: restarted
+
+        

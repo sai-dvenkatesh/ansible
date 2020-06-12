@@ -1,0 +1,11 @@
+---
+# vars file for git
+nvm_url: https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh
+git_url: https://github.com/prometheus/node_exporter.git
+branch: master
+path1:  /home/laalsa/node_exporter
+path2:  /home/laalsa/
+avail: present
+package_name: git
+user: laalsa
+version: v12.16.3

@@ -1,0 +1,18 @@
+---
+- name: "Demo To Perform Set of Actions 1"
+  hosts: all
+  serial: yes
+  remote_user: admin
+
+  tasks:
+    - name: check connection
+      ping: 
+
+- name: "Demo to Perform Set of Actions 2"
+  hosts: all
+  serial: yes
+  remote_user: admin
+  tasks:
+    - name: check time
+      command: hostnamectl
+      

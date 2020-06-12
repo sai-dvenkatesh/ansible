@@ -1,0 +1,11 @@
+---
+# tasks file for apache
+- include: nginx-repo.yml
+- include: installnginx.yml
+- include: set-path.yml
+- include: service.yml
+- include: config-vhosts.yml
+
+
+
+

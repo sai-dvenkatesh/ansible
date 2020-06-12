@@ -1,0 +1,19 @@
+---
+- name: "Install the firewalld and enable firewalld"
+  hosts: localhost
+  user: ansible
+  connection: local
+  become: true
+  become_method: sudo
+ 
+  tasks:
+    - name: Install the python-firewall
+      yum:
+        name: python-firewall
+        state: present
+
+    - name: enable firewalld
+      firewalld:
+        port: 22/tcp
+        immediate: yes
+        state: enabled

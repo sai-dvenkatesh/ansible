@@ -1,0 +1,7 @@
+[servers]
+servera.example.com  #ansible_python_interpreter="/usr/bin/python3"
+serverb.example.com  #ansible_python_interpreter="/usr/bin/python"
+#serverc.example.com  ansible_python_interpreter="/usr/bin/env python3"
+
+[servers:vars]
+web_file=~/dev/files/index.html

@@ -1,0 +1,14 @@
+---
+- hosts: all
+  name: openfirewall
+  remote_user: admin
+  become: true
+  become_method: sudo
+
+  tasks:
+    - name: Open Firewall 
+      firewalld:
+        port: 80/tcp
+        permanent: yes
+        state: enabled
+        immediate: yes

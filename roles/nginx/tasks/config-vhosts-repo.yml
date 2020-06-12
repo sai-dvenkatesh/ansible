@@ -1,0 +1,8 @@
+- name: "configuring {{ package_name }} virtualhost"
+  template:
+    src: templates/repo.example.com.conf.j2
+    dest: /etc/nginx/conf.d/{{hostname}}.conf
+    owner: root
+    mode: 0644
+  notify: restart {{ package_name }}
+

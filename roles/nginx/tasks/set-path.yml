@@ -1,0 +1,8 @@
+---
+- name: "configure nginx path"
+  command:  mkdir -p "{{ path }}"
+
+- name: "copy index.html file"
+  copy:
+    src: files/index.html
+    dest: "{{ path }}"

@@ -1,0 +1,13 @@
+---
+- name: "Install {{ package_name }}"
+  yum:
+    name: "{{ package_name }}"
+    state: "{{ avail }}"
+  when: ansible_os_family == "RedHat"
+
+- name: "Install {{ package_name }}"
+  apt:
+    name: "{{ package_name }}"
+    state: "{{ avail }}"
+  when: ansible_os_family == "Debian"
+

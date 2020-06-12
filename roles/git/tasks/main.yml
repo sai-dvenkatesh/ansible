@@ -1,0 +1,6 @@
+---
+# tasks file for git
+- include: install-git.yml
+- include: install-nvm-node.yml
+- include: git-clone.yml
+

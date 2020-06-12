@@ -1,0 +1,10 @@
+server {
+     server_name {{ hostname }};
+    location / {
+        root   {{ path }};
+        index index.html index.htm;
+        try_files $uri$args $uri$args/ /index.html;
+        error_log /var/log/nginx/{{ hostname }}-error.log;
+    }
+
+}

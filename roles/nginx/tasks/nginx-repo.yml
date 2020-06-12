@@ -1,0 +1,25 @@
+---
+- name: "configure nginx repository"
+  yum_repository: 
+    name: "{{ package_name }}"
+    description: "repository for nginx"
+    file: nginx.repo
+    baseurl: "{{ url1 }}"
+    gpgkey: "{{ gpg_url }}"
+    enabled: "{{ set }}"
+    gpgcheck: "{{ set }}"
+  when: ansible_os_family == "RedHat"
+  
+- name: add nginx apt-key
+  apt_key: 
+    url: "{{ gpg_url }}"
+    state: present 
+  when: ansible_os_family == "Debian" 
+
+- name: "configure apt repository"
+  apt_repository:
+    repo: "{{ url2 }}"
+    state: "{{ avail }}"
+    filename: nginx.list
+    update_cache: yes
+  when: ansible_os_family == "Debian" 

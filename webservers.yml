@@ -1,0 +1,73 @@
+---
+- name: Install Web Servers
+  hosts: servers
+  remote_user: admin
+  become: true
+  become_method: sudo
+  
+  tasks:
+    - name: Install the package httpd
+      yum:
+       name: httpd
+       state: present
+      when: ansible_os_family == "RedHat"
+    
+    - name: Install the package apache2
+      apt:
+       name: apache2
+       state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Start the service
+      service: 
+         name: httpd
+         state: started
+         enabled: yes
+      when: ansible_os_family == "RedHat"
+    
+    - name: Start the service
+      service: 
+         name: apache2
+         state: started
+         enabled: yes
+      when: ansible_os_family == "Debian"
+     
+    - name: Set Index.html file
+      tags:
+        - copyindexfile
+      copy:
+        src: '{{ web_file }}'
+        dest: /var/www/html/
+        mode: 0644
+        owner: root
+        group: root
+
+    - name: enable firewall
+      firewalld:
+        port: 80/tcp
+        permanent: yes
+        state: enabled
+        immediate: yes
+      when: ansible_os_family == "RedHat"
+
+    - name: enable ufw
+      ufw:
+        state: enabled
+        policy: allow
+        direction: incoming
+      when: ansible_os_family == "Debian"
+             
+       
+    - name: Enable ufw
+      ufw:
+       rule: allow
+       port: 22
+       proto: tcp
+      when: ansible_os_family == "Debian"
+       
+    - name: Enable ufw
+      ufw:
+       rule: allow
+       port: 22
+       proto: tcp
+      when: ansible_os_family == "Debian"

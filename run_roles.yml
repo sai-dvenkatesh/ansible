@@ -1,0 +1,9 @@
+---
+- hosts: all
+  remote_user: admin
+  become: true
+  become_method: sudo
+  
+  roles:
+    - nginx
+  

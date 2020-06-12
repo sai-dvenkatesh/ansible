@@ -1,0 +1,25 @@
+---
+- name: Task to Install ansible with pip
+  hosts: all
+  remote_user: admin
+  become: true
+  become_method: sudo
+  
+  tasks:
+    - name: setup Installation
+      yum:
+        name: python3-setuptools
+        state: present
+      when: ansible_hostname == "serverb"
+
+    - name: Task to Install pip
+      yum:
+        name: python3-pip
+        state: present   
+      when: ansible_hostname == "serverb"
+
+    - name: install ansible pip
+      pip:
+        name: ansible
+        virtualenv: ~/
+      when: ansible_hostname == "serverb"
